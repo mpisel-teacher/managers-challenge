@@ -1,0 +1,224 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The Manager's Challenge — Simple Dashboard</title>
+<style>
+:root{--navy:#172d46;--blue:#1764a0;--line:#dce4ec}*{box-sizing:border-box}body{margin:0;background:#f4f7fa;color:#243447;font:16px/1.5 system-ui,Arial}header{background:var(--navy);color:white;padding:26px max(20px,calc((100vw - 940px)/2))}header h1{margin:0;font-size:30px}header p{margin:4px 0;color:#d4e1ed}.wrap{max-width:940px;margin:24px auto;padding:0 16px}.card{background:white;border:1px solid var(--line);border-radius:13px;padding:22px;margin:0 0 18px}h2{margin:0 0 10px;color:var(--navy);font-size:21px}h3{font-size:17px;margin:5px 0}p{margin:8px 0 12px}.hint{color:#526579;font-size:14px}.highlight{background:#edf5fb;border-left:4px solid var(--blue);padding:14px;border-radius:7px}.profiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.profile{padding:13px;border:1px solid var(--line);border-radius:9px}.profile p{font-size:14px;margin-bottom:0}label{display:block;font-weight:650;margin:12px 0 6px}input,select,textarea{font:inherit;width:100%;padding:10px;border:1px solid #aebecd;border-radius:8px;background:white}textarea{resize:vertical;min-height:95px}button{border:0;background:var(--blue);color:white;padding:12px 18px;border-radius:8px;font:inherit;font-weight:700;cursor:pointer}button.secondary{background:#e6eef6;color:#16456f}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.note{background:#fff8e8;border:1px solid #eed9a9;padding:13px;border-radius:9px}.hidden{display:none}ul{padding-left:23px}li{margin:6px 0}.result{margin-top:14px}.score{font-size:42px;font-weight:800;color:var(--navy)}.bar{height:12px;background:#dce8f0;border-radius:20px;overflow:hidden}.bar>div{height:100%;background:var(--blue)}.actions{display:flex;gap:10px;flex-wrap:wrap}.footer{text-align:center;color:#697d8d;font-size:13px;padding:10px 0 25px}@media(max-width:680px){.profiles,.three{grid-template-columns:1fr}header{padding:24px 16px}}
+#printReport{display:none}
+@media print{
+@page{size:letter;margin:0.65in}
+body{background:#fff;color:#111;font:11pt/1.45 Arial,sans-serif}
+header,.wrap,.footer{display:none!important}
+#printReport{display:block!important}
+#printReport h1{font-size:19pt;margin:0 0 8px}
+#printReport h2{font-size:13pt;margin:18px 0 7px;border-bottom:1px solid #bbb}
+#printReport h3{font-size:11pt;margin:10px 0 3px}
+#printReport table{width:100%;border-collapse:collapse;font-size:9.5pt}
+#printReport td,#printReport th{border:1px solid #aaa;padding:6px;vertical-align:top;text-align:left}
+#printReport tr{break-inside:avoid}
+#printReport p{margin:5px 0}
+#printReport .muted{color:#555;font-size:9pt}
+}
+</style></head><body>
+<header><h1>The Manager's Challenge</h1><p>Build the Best Team · Student Dashboard</p></header>
+<main class="wrap">
+<div class="card"><strong>Your mission:</strong> Choose the three employees who give your company the best chance of success. There is no single correct team. <strong>Be prepared to justify your decisions with evidence</strong> when you meet with the CEO.<p class="hint">No written explanations or PDF submission required. Your selections and notes save in this browser on this device.</p></div>
+<section class="card"><h2>1 · Your Management Group</h2><label for="members">Group members</label><input id="members" placeholder="Enter group members' names"><label for="company">Assigned company</label><select id="company"><option value="">Choose your company</option><option value="A">Sneaker Central</option><option value="B">Pizza Rush</option><option value="C">JumpZone</option><option value="D">GameGear</option></select></section>
+<section class="card"><h2>2 · Understand Your Company</h2><div id="scenarioText" class="highlight">Select a company above to see your project.</div><p class="hint"><strong>Think about:</strong> What kind of workplace culture does this company have? Which two employee qualities matter most for this project? Be ready to explain your reasoning to the CEO.</p></section>
+<section class="card"><h2>3 · Meet the Employees</h2><p>Review all six profiles. Every employee has strengths and weaknesses.</p><div class="profiles" id="profiles"></div></section>
+<section class="card"><h2>4 · Build Your Team</h2><p>Select <strong>three different employees</strong>. You will explain your choices out loud during your CEO meeting.</p><div class="three"><div><label for="pick0">Employee 1</label><select id="pick0"></select></div><div><label for="pick1">Employee 2</label><select id="pick1"></select></div><div><label for="pick2">Employee 3</label><select id="pick2"></select></div></div><p id="teamWarning" class="hint"></p></section>
+<section class="card"><h2>5 · Probability of Success Simulator</h2><p>Test how well your employees' strengths fit your company's project. You'll receive an estimated score, an explanation of what your team does well, and a potential concern. <strong>This is a fictional classroom simulation, not your grade.</strong></p><button id="simulate" type="button">Simulate My Team</button><div id="result" class="highlight result" aria-live="polite">Choose your team, then run the simulation.</div><div class="note" style="margin-top:15px"><strong>Would you change your original team?</strong> You may keep your choices or try a different combination. The CEO will ask you to explain what you changed—or why you decided to stay with your original three.</div><div id="changeBox" class="hidden"><label for="changes">Optional notes about your changes</label><textarea id="changes" placeholder="What changed? Why? Or why did you keep your original three?"></textarea><p class="hint">These are optional notes for your meeting, not a written assignment.</p></div></section>
+<section class="card"><h2>6 · Get Ready for the CEO Meeting</h2><p><strong>Be ready to justify your decisions.</strong> The CEO may ask:</p><ul><li>What kind of workplace culture does your company have? How do you know?</li><li>Why did you select these three employees?</li><li>Which employee is a Just Enougher, All-Star, or Climber? What evidence supports that?</li><li>How might your employees' strengths and weaknesses affect the company's success?</li><li>Did the simulation cause you to change your original team? Why or why not?</li><li>What if I suggest replacing one of your employees? Would you agree or defend your original choice?</li></ul><div class="note"><strong>CEO Challenge:</strong> You may be asked to compare your team with another employee option. Explain the benefits and consequences of both choices before making your decision.</div><div class="actions" style="margin-top:18px"><button id="pdf" type="button">Create PDF Report</button><button id="copy" class="secondary" type="button">Show Team & Notes</button><button id="reset" class="secondary" type="button">Start Over</button></div><p class="hint">You can keep this dashboard open during your CEO meeting. The PDF report includes your original team, every tested combination, score changes, and any employee selections changed between simulations. Click Create PDF Report to download a clean, organized PDF with a team summary and complete change history.</p></section>
+<div id="copyPanel" class="card hidden"><h2>Team & Notes</h2><p>Select and copy the text below if needed.</p><textarea id="copyText" rows="9" readonly></textarea></div></main><article id="printReport" aria-label="Management report"></article><div class="footer">Business Foundations · The Manager's Challenge</div>
+<script>
+const scenarios={
+A:{name:'Sneaker Central — Grand Opening',background:'Sneaker Central is opening a new shoe store near the high school. It sells popular sneakers and athletic clothing to teens and families.',culture:'The store values creativity, enthusiasm, initiative, friendly service, and meeting deadlines.',project:'In three weeks, your employees must plan the grand opening, set up displays, create low-cost promotions, and welcome shoppers.',challenges:['The advertising budget is small.','A rival shoe store is offering discounts nearby.','A large crowd is expected.','Some sneaker deliveries might be late.'],success:'Open on time, attract shoppers, and make customers want to return.'},
+B:{name:'Pizza Rush — Friday Night Disaster',background:'Pizza Rush is a popular neighborhood pizza restaurant. Students, families, and sports teams rely on fast service and accurate orders.',culture:'Pizza Rush values dependability, speed, accuracy, responsibility, and staying calm under pressure.',project:'A school event orders 80 pizzas for Friday evening, but the restaurant must still serve regular customers. Your three employees will organize preparation, order accuracy, and pickup.',challenges:['All 80 pizzas must be ready at the promised time.','A mistake could leave a whole team without food.','The restaurant is short-staffed.','Regular customers are still ordering.'],success:'Prepare the right pizzas on time, keep customers satisfied, and avoid waste.'},
+C:{name:'JumpZone — Customer Comeback',background:'JumpZone is a trampoline park where families and friends come for birthday parties and weekend fun.',culture:'JumpZone values friendly service, professionalism, safety, patience, teamwork, and taking responsibility for mistakes.',project:'Bad online reviews mention long lines, unfriendly employees, and poorly organized birthday parties. Your three employees must improve the experience before a busy weekend.',challenges:['Several birthday parties are booked for Saturday.','Some workers blame others when problems happen.','The park cannot spend much money.','Safety rules must never be ignored.'],success:'Shorten wait times, improve guest experiences, keep everyone safe, and earn better reviews.'},
+D:{name:'GameGear — Headset Launch',background:'GameGear sells affordable gaming accessories to teens and young adults.',culture:'GameGear values creativity, initiative, adaptability, quality, professionalism, and meeting deadlines.',project:'Your employees have one month to launch a new wireless gaming headset. They must plan demonstrations, promotions, and ways to respond to customer questions.',challenges:['A competitor sells a similar headset for less.','Testers report occasional sound problems.','The advertising budget is limited.','The launch date cannot be moved.'],success:'Launch on time, build excitement, solve problems responsibly, and protect the brand’s reputation.'}};
+const employees=[['Marcus Bennett','4 years','Highly motivated; volunteers for difficult assignments, suggests improvements, and wants to become a manager. Sometimes takes control without listening to coworkers.'],['Jasmine Carter','2 years','Very creative; develops innovative ideas and solves unexpected problems. Sometimes misses deadlines while perfecting ideas and needs reminders to finish.'],['Ethan Miller','6 years','Excellent attendance; completes accurate work on time and follows through. Rarely volunteers for extra work, prefers routines, and dislikes unexpected changes.'],['Taylor Brooks','3 years','Friendly and enthusiastic; builds customer relationships, helps coworkers, and improves morale. Sometimes socializes too much and falls behind on responsibilities.'],['Jordan Davis','5 years','Extremely productive, independent, competitive, and reliable with deadlines. Sometimes criticizes slower coworkers and makes disrespectful comments.'],['Sam Rodriguez','1 year','Learns quickly, adapts well to change, stays positive, and suggests practical solutions. Sometimes rushes and misses important details.']];
+
+const ratings=[
+[5,4,3,3,4,3], // Marcus
+[5,2,3,3,4,4], // Jasmine
+[2,4,5,3,2,5], // Ethan
+[3,2,3,5,4,4], // Taylor
+[2,5,4,1,3,1], // Jordan
+[4,4,2,4,5,4]  // Sam
+
+];
+const priorities={A:[5,3,2,5,3,3],B:[1,5,5,3,3,4],C:[2,3,4,5,4,5],D:[5,4,5,3,5,4]};
+const behaviors=['Creativity & initiative','Productivity & time management','Accuracy & responsibility','Customer service','Adaptability','Professionalism'];
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const keys=['members','company','pick0','pick1','pick2','changes'];
+let original=null,lastResult=null,history=[],edits=[],lastPicks=null;
+$('profiles').innerHTML=employees.map((e,i)=>`<div class="profile"><h3>${i+1}. ${esc(e[0])}</h3><p>${esc(e[2])}</p></div>`).join('');
+for(let i=0;i<3;i++)$('pick'+i).innerHTML='<option value="">Choose an employee</option>'+employees.map((e,j)=>`<option value="${j}">${esc(e[0])}</option>`).join('');
+function renderCompany(){const s=scenarios[$('company').value];$('scenarioText').innerHTML=s?`<h3>${esc(s.name)}</h3><p>${esc(s.background)}</p><p><strong>Workplace expectations:</strong> ${esc(s.culture)}</p><p><strong>Your project:</strong> ${esc(s.project)}</p><strong>Challenges:</strong><ul>${s.challenges.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p><strong>Success looks like:</strong> ${esc(s.success)}</p>`:'Select a company above to see your project.'}
+function picks(){return [0,1,2].map(i=>$('pick'+i).value)}
+function valid(){const p=picks();return $('company').value&&p.every(x=>x!=='')&&new Set(p).size===3}
+function updatePicks(){const p=picks();for(let i=0;i<3;i++)for(const o of $('pick'+i).options)o.disabled=o.value!==''&&p.some((v,j)=>j!==i&&v===o.value);$('teamWarning').textContent=p.filter(Boolean).length===3&&new Set(p).size<3?'Choose three different employees.':'';if(original){$('changeBox').classList.remove('hidden')}if(lastResult){$('result').innerHTML='<p>Your selections have changed. Click <strong>Simulate My Team</strong> to see the new result.</p>';lastResult=null}}
+function save(){try{localStorage.setItem('managerSimpleV2',JSON.stringify({fields:Object.fromEntries(keys.map(k=>[k,$(k).value])),original,history,edits}))}catch(e){}}
+try{const stored=JSON.parse(localStorage.getItem('managerSimpleV2')||'{}');if(stored.fields)keys.forEach(k=>{if(stored.fields[k]!=null)$(k).value=stored.fields[k]});if(stored.original)original=stored.original;if(Array.isArray(stored.history))history=stored.history;if(Array.isArray(stored.edits))edits=stored.edits}catch(e){}
+lastPicks=picks().slice();
+keys.forEach(k=>$(k).addEventListener('change',()=>{if(k==='company'){renderCompany();lastResult=null;$('result').textContent='Run the simulation for your selected company.'}if(k.startsWith('pick')){const current=picks();if(history.length){const slot=Number(k.slice(-1));edits.push({time:new Date().toLocaleString(),slot:slot+1,from:lastPicks[slot],to:current[slot]});}lastPicks=current.slice();updatePicks();}save()}));
+keys.forEach(k=>$(k).addEventListener('input',save));
+renderCompany();updatePicks();if(original)$('changeBox').classList.remove('hidden');
+function simulate(){
+if(!valid()){$('result').textContent='First select your company and three different employees.';return}
+const ids=picks().map(Number),c=$('company').value,w=priorities[c];
+const avg=behaviors.map((_,j)=>ids.reduce((sum,id)=>sum+ratings[id][j],0)/3);
+const weighted=avg.reduce((sum,x,j)=>sum+x*w[j],0)/w.reduce((a,b)=>a+b,0);
+const critical=behaviors.map((name,j)=>({name,j,weight:w[j],fit:avg[j]})).filter(x=>x.weight>=4);
+const gaps=critical.filter(x=>x.fit<3.1).length;
+const professionalismConcern=ids.filter(id=>ratings[id][5]<=2).length;
+const coverage=critical.filter(x=>ids.some(id=>ratings[id][x.j]>=4)).length;
+const score=Math.max(38,Math.min(94,Math.round(18+weighted*17+coverage*1.8-gaps*4-professionalismConcern*9)));
+const tier=score>=85?'Strong fit':score>=70?'Promising fit':score>=55?'Some concerns':'High-risk combination';
+const specific={
+A:[
+['Can bring creative promotions and take charge of grand-opening tasks.','May make decisions without listening to coworkers, creating conflict during a busy launch.'],
+['Could design eye-catching promotions that attract teenage shoppers.','May spend too long perfecting ideas and miss important opening deadlines.'],
+['Can keep preparations accurate and on schedule.','May struggle if late sneaker deliveries force last-minute changes.'],
+['Can welcome customers and make the opening feel exciting.','May get distracted socializing when displays or customers need attention.'],
+['Can work quickly to get displays and preparations finished.','Disrespectful comments could damage morale and the customer experience.'],
+['Can adjust when deliveries or plans change and help solve problems.','May overlook display or promotion details if rushing.']],
+B:[
+['Can take initiative to organize the large pizza order.','May ignore coworkers’ input when the kitchen needs clear communication.'],
+['Can solve unexpected problems creatively.','Missing deadlines is risky when 80 pizzas must be ready at one time.'],
+['Can double-check orders and reliably meet promised pickup times.','May become frustrated if the order changes suddenly.'],
+['Can keep customers friendly and calm during a rush.','Socializing could slow down pizza preparation and pickup.'],
+['Can work quickly and meet tight production deadlines.','Harsh comments could increase stress in an already busy kitchen.'],
+['Can adapt when orders change or supplies run low.','Rushing could lead to wrong toppings or missing pizzas.']],
+C:[
+['Can take initiative to improve customer experiences.','Taking over without listening could frustrate employees trying to fix problems.'],
+['Can invent creative ways to shorten lines or improve birthday parties.','May take too long developing ideas before the busy weekend.'],
+['Can follow safety rules and reliably complete assigned tasks.','May resist new procedures needed to improve service.'],
+['Can make families feel welcome and help rebuild positive reviews.','Too much socializing could leave guests waiting.'],
+['Can move quickly to reduce long lines.','Disrespectful behavior could create even more negative reviews.'],
+['Can respond calmly to changing guest needs and solve problems.','Overlooked details are especially risky when safety matters.']],
+D:[
+['Can lead the launch and suggest ways to stand out from competitors.','May ignore feedback from employees who notice product problems.'],
+['Can develop creative promotions and new solutions for the headset.','May delay important launch tasks while perfecting ideas.'],
+['Can check product details and reliably complete launch assignments.','May resist quick changes when sound problems are discovered.'],
+['Can explain the headset to customers and build positive relationships.','May get distracted and fall behind on launch preparations.'],
+['Can finish launch tasks quickly and meet deadlines.','Disrespectful communication could hurt teamwork and the brand.'],
+['Can adapt to the cheaper competitor and solve unexpected issues.','Rushing could overlook headset quality problems.']]
+};
+const contributions=ids.map(id=>({name:employees[id][0],positive:specific[c][id][0],risk:specific[c][id][1]}));
+const mostNeeded=critical.slice().sort((x,y)=>y.weight-x.weight);
+const weakest=mostNeeded.slice().sort((x,y)=>x.fit-y.fit)[0];
+const strongest=mostNeeded.slice().sort((x,y)=>y.fit-x.fit)[0];
+const teamworkRisk=professionalismConcern?' One selected employee also has a serious professionalism concern that could affect coworkers or customers.':'';
+const summary=`Your team has a useful advantage in ${strongest.name.toLowerCase()}, which matters for ${scenarios[c].name}. However, ${weakest.name.toLowerCase()} is a potential weakness for this project.${teamworkRisk} Clear responsibilities and attention to these risks could improve the outcome.`;
+if(!original||original.company!==c){original={company:c,team:picks().slice()};$('changeBox').classList.remove('hidden')}
+const changed=original.team.slice().sort().join(',')!==picks().slice().sort().join(',');
+lastResult={score,tier,contributions,summary};
+const previous=history.length?history[history.length-1]:null;
+const oldTeam=previous?previous.team:[];
+const added=ids.filter(id=>!oldTeam.includes(id)).map(id=>employees[id][0]);
+const removed=oldTeam.filter(id=>!ids.includes(id)).map(id=>employees[id][0]);
+history.push({number:history.length+1,time:new Date().toLocaleString(),company:c,team:ids.slice(),score,delta:previous&&previous.company===c?score-previous.score:null,added,removed,summary});
+
+$('result').innerHTML=`<div class="score">${score}%</div><strong>${tier} — simulated chance of project success</strong><div class="bar"><div style="width:${score}%"></div></div><p class="hint">This is a fictional classroom estimate, not a real-world probability or a grade.</p><h3>How your employees affect the result</h3>${contributions.map(x=>`<div class="profile" style="margin:10px 0"><strong>${esc(x.name)}</strong><p><strong>Contribution:</strong> ${esc(x.positive)}</p><p><strong>Potential concern:</strong> ${esc(x.risk)}</p></div>`).join('')}<h3>Overall team feedback</h3><p>${esc(summary)}</p><p class="highlight"><strong>${changed?'You changed your original team.':'You kept your original three.'}</strong> Be prepared to explain why at the CEO meeting. ${changed?'Your first selections are saved for comparison.':'You can try another combination if you wish.'}</p>`;
+$('result').innerHTML+=`<p class="hint"><strong>Simulation attempts recorded:</strong> ${history.length}. ${previous&&previous.company===c?'Change since last simulation: '+(score-previous.score>=0?'+':'')+(score-previous.score)+' percentage points.':''}</p>`;
+save();
+}
+$('simulate').addEventListener('click',simulate);
+$('copy').addEventListener('click',()=>{const p=picks();const names=p.map(i=>i===''?'Not selected':employees[Number(i)][0]);const orig=original?original.team.map(i=>employees[Number(i)][0]).join(', '):'Not recorded';const t=`THE MANAGER'S CHALLENGE\nGroup: ${$('members').value}\nCompany: ${scenarios[$('company').value]?.name||'Not selected'}\nOriginal three: ${orig}\nCurrent three: ${names.join(', ')}\nSimulation: ${lastResult?lastResult.score+'%':'Not run in this session'}\nTeam feedback: ${lastResult?lastResult.summary:'Not available'}\nChange notes: ${$('changes').value||'None'}`;$('copyText').value=t;$('copyPanel').classList.remove('hidden');$('copyText').focus();$('copyText').select();});
+
+function nameOf(i){return i===''||i==null?'None':employees[Number(i)]?.[0]||'Unknown'}
+
+// Self-contained PDF generator: no pop-ups, clipboard permissions, external libraries, or print dialogs.
+function downloadPdfReport(first,last,net,c){
+// Generate a styled, paginated PDF locally. No external libraries or print window.
+const ascii=x=>String(x).normalize('NFKD').replace(/[^\x20-\x7E]/g,'-');
+const quote=x=>ascii(x).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');
+const fmt=d=>d==null?'First test':(d>0?'+':'')+d+' pts';
+const team=arr=>arr.map(nameOf).join(', ');
+const navy=[0.10,0.19,0.30],blue=[0.09,0.39,0.63],grey=[0.35,0.42,0.49];
+const pages=[];let commands=[],y=745,pageNo=0;
+const rgb=col=>col.map(v=>v.toFixed(3)).join(' ');
+const txt=(t,x,yy,size=10,bold=false,color=navy)=>{commands.push(`${rgb(color)} rg BT /${bold?'F2':'F1'} ${size} Tf 1 0 0 1 ${x} ${yy} Tm (${quote(t)}) Tj ET`)};
+const rule=(yy)=>commands.push('0.84 0.88 0.92 RG 0.7 w 45 '+yy+' m 567 '+yy+' l S');
+const rect=(x,yy,w,h,col)=>commands.push(`${rgb(col)} rg ${x} ${yy} ${w} ${h} re f`);
+function newPage(){
+ if(commands.length)pages.push(commands.join('\n')+'\n');
+ commands=[];pageNo++;rect(0,757,612,35,navy);txt('THE MANAGER\'S CHALLENGE  /  CEO REPORT',45,768,12,true,[1,1,1]);
+ txt('Page '+pageNo,527,28,9,false,grey);y=735;
+}
+function room(h){if(y-h<54)newPage()}
+function heading(t){room(36);y-=12;txt(t.toUpperCase(),45,y,12,true,blue);y-=11;rule(y);y-=15}
+function wrap(text,max=91){const words=ascii(text).split(/\s+/),rows=[];let line='';for(const word of words){if((line+' '+word).trim().length>max&&line){rows.push(line);line=word}else line=(line+' '+word).trim()}if(line)rows.push(line);return rows.length?rows:['']}
+function line(label,value){const rows=wrap(label+': '+value,91);room(rows.length*14+4);rows.forEach((v,i)=>{txt(v,50,y,10,i===0&&label==='Original team');y-=14})}
+function para(t){for(const raw of String(t).split('\n')){for(const row of wrap(raw,91)){room(14);txt(row,50,y,10,false,navy);y-=14}}y-=6}
+function block(title,body){const lines=wrap(body,85);room(24+lines.length*14);rect(45,y-14-lines.length*14,522,21+lines.length*14,[0.95,0.97,0.99]);txt(title,55,y-4,10,true,navy);y-=20;lines.forEach(v=>{txt(v,55,y,9.5,false,navy);y-=14});y-=13}
+newPage();
+txt('Management group: '+($('members').value||'Not entered'),45,y,11,true);y-=19;
+txt('Company: '+scenarios[c].name,45,y,11);y-=19;
+txt('Generated: '+new Date().toLocaleString(),45,y,9,false,grey);y-=17;
+heading('Your team at a glance');
+block('ORIGINAL TEAM  -  '+first.score+'%',team(first.team));
+block('LATEST TESTED TEAM  -  '+last.score+'%',team(last.team));
+room(45);txt('SUCCESS RATE CHANGE',50,y,9,true,grey);y-=27;
+txt((net>0?'+':'')+net+' percentage points',50,y,21,true,net>=0?blue:[0.7,0.25,0.18]);y-=23;
+line('Simulation attempts',String(history.length));line('Employee dropdown changes after first test',String(edits.length));
+const currently=picks().map(nameOf).join(', ');
+if(currently!==team(last.team))para('Current selections have not yet been simulated: '+currently);
+heading('Every simulation');
+para('Each row below is one click of Simulate My Team. Changes show the difference from the previous test.');
+history.forEach(h=>{
+ const changes=h.number===1?'Original team':((h.added.length?'Added '+h.added.join(', ')+'. ':'')+(h.removed.length?'Removed '+h.removed.join(', ')+'.':'')||'Same employees tested again.');
+ const rows=wrap('Employees: '+team(h.team),84);
+ const changeRows=wrap(changes,84);
+ const height=30+rows.length*13+changeRows.length*13;
+ room(height);
+ rect(45,y-height+7,522,height,[0.96,0.975,0.99]);
+ txt('TEST '+h.number+'   |   '+h.score+'%   |   '+fmt(h.delta),55,y-7,11,true,blue);y-=22;
+ rows.forEach(r=>{txt(r,55,y,9.5);y-=13});
+ changeRows.forEach(r=>{txt(r,55,y,9,false,grey);y-=13});
+ y-=14;
+});
+heading('Every employee selection change');
+para('This includes dropdown changes even when students did not run another simulation.');
+if(!edits.length)para('No employee selection changes recorded after the first simulation.');
+edits.forEach((e,i)=>line('Change '+(i+1),'Position '+e.slot+': '+nameOf(e.from)+' to '+nameOf(e.to)+'  ('+e.time+')'));
+heading('Overall team feedback');para(last.summary);
+heading('Student notes');para($('changes').value||'No notes entered.');
+heading('About this report');para('Success percentages are fictional classroom estimates, not grades. Activity history is stored on this device and can be reset. A high number of tests does not automatically mean students were guessing.');
+pages.push(commands.join('\n')+'\n');
+const objects=[null],put=v=>(objects.push(v),objects.length-1);
+const catalog=put(''),pagesId=put('');
+const font=put('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+const boldFont=put('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>');
+const ids=[];
+for(const stream of pages){const content=put('<< /Length '+stream.length+' >>\nstream\n'+stream+'endstream');ids.push(put('<< /Type /Page /Parent '+pagesId+' 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 '+font+' 0 R /F2 '+boldFont+' 0 R >> >> /Contents '+content+' 0 R >>'))}
+objects[catalog]='<< /Type /Catalog /Pages '+pagesId+' 0 R >>';
+objects[pagesId]='<< /Type /Pages /Kids ['+ids.map(i=>i+' 0 R').join(' ')+'] /Count '+ids.length+' >>';
+let pdf='%PDF-1.4\n';const offsets=[0];for(let i=1;i<objects.length;i++){offsets[i]=pdf.length;pdf+=i+' 0 obj\n'+objects[i]+'\nendobj\n'}
+const xref=pdf.length;pdf+='xref\n0 '+objects.length+'\n0000000000 65535 f \n';for(let i=1;i<objects.length;i++)pdf+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';
+pdf+='trailer\n<< /Size '+objects.length+' /Root '+catalog+' 0 R >>\nstartxref\n'+xref+'\n%%EOF';
+const blob=new Blob([pdf],{type:'application/pdf'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='Managers_Challenge_CEO_Report.pdf';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+function makeReport(){
+const c=$('company').value;
+if(!c||!history.length){$('result').textContent='Select a company and run at least one simulation before downloading your PDF report.';$('result').scrollIntoView();return}
+const first=history[0],last=history[history.length-1];
+const finalTeam=picks().filter(x=>x!=='').map(nameOf);
+const fmtDelta=d=>d==null?'First attempt':(d>0?'+':'')+d+' points';
+const safe=esc;
+const teamLabel=arr=>arr.map(nameOf).map(safe).join(', ');
+const changeRows=history.map(h=>`<tr><td>${h.number}</td><td>${safe(h.time)}</td><td>${teamLabel(h.team)}</td><td><strong>${h.score}%</strong></td><td>${fmtDelta(h.delta)}</td><td>${h.number===1?'Original team':(h.added.length?'Added: '+h.added.map(safe).join(', ')+'; ':'')+(h.removed.length?'Removed: '+h.removed.map(safe).join(', '):'No employee changes')}</td></tr>`).join('');
+const editRows=edits.length?edits.map((e,i)=>`<tr><td>${i+1}</td><td>${safe(e.time)}</td><td>Position ${e.slot}: ${safe(nameOf(e.from))} → ${safe(nameOf(e.to))}</td></tr>`).join(''):'<tr><td colspan="3">No selection changes recorded after the first simulation.</td></tr>';
+const net=last.score-first.score;
+$('printReport').innerHTML=`<h1>The Manager's Challenge — CEO Preparation Report</h1><p><strong>Management group:</strong> ${safe($('members').value||'Not entered')}</p><p><strong>Company:</strong> ${safe(scenarios[c].name)}</p><p><strong>Report generated:</strong> ${safe(new Date().toLocaleString())}</p>
+<h2>Team summary</h2><p><strong>Original team:</strong> ${teamLabel(first.team)}</p><p><strong>Latest simulated team:</strong> ${teamLabel(last.team)}</p><p><strong>Currently selected:</strong> ${finalTeam.map(safe).join(', ')||'None'}${picks().map(Number).join(',')!==last.team.join(',')?' (not yet simulated)':''}</p><p><strong>Original success estimate:</strong> ${first.score}% &nbsp; <strong>Latest:</strong> ${last.score}% &nbsp; <strong>Net change:</strong> ${fmtDelta(net)}</p><p><strong>Total simulation attempts:</strong> ${history.length} &nbsp; <strong>Employee dropdown changes after first simulation:</strong> ${edits.length}</p><p class="muted">These percentages are fictional classroom estimates. An attempt is recorded each time the Simulate My Team button is pressed. Dropdown changes are counted separately, including changes not followed by a simulation. Activity is stored in this browser on this device and can be reset.</p>
+<h2>All simulation attempts</h2><table><thead><tr><th>#</th><th>Time</th><th>Employees</th><th>Score</th><th>Change</th><th>Who changed?</th></tr></thead><tbody>${changeRows}</tbody></table>
+<h2>All recorded employee-selection edits</h2><table><thead><tr><th>#</th><th>Time</th><th>Change</th></tr></thead><tbody>${editRows}</tbody></table>
+<h2>Latest simulated team feedback</h2><p>${safe(last.summary)}</p>
+<h2>Student notes about decisions</h2><p>${safe($('changes').value||'No notes entered.').replace(/\n/g,'<br>')}</p>
+<p class="muted">Teacher note: A large number of attempts may prompt a discussion, but it does not by itself establish whether students were guessing or reasoning.</p>`;
+downloadPdfReport(first,last,net,c);
+}
+$('pdf').addEventListener('click',makeReport);
+$('reset').addEventListener('click',()=>{if(confirm('Clear all selections and notes on this device?')){keys.forEach(k=>$(k).value='');original=null;lastResult=null;history=[];edits=[];lastPicks=['','',''];renderCompany();updatePicks();$('result').textContent='Choose your team, then run the simulation.';$('changeBox').classList.add('hidden');save()}});
+</script></body></html>
